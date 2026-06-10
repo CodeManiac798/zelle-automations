@@ -271,11 +271,235 @@ section { padding:var(--section-pad) 0;position:relative; }
   .wa-float{display:none}
   body{padding-bottom:68px}
 }
+
+/* ===== ZEL CHATBOT ===== */
+.zel-trigger {
+  position:fixed;bottom:24px;right:24px;z-index:950;
+  width:56px;height:56px;border-radius:14px;
+  background:var(--bg-card);border:1.5px solid var(--border-accent);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all 0.4s cubic-bezier(0.16,1,0.3,1);
+  box-shadow:0 8px 32px rgba(195,173,138,0.08);
+  animation:slideIn 0.6s cubic-bezier(0.16,1,0.3,1) 1.5s backwards;
+}
+
+.zel-trigger:hover {
+  background:var(--bg-card-hover);
+  border-color:var(--accent);
+  transform:translateY(-4px);
+  box-shadow:0 12px 40px rgba(195,173,138,0.15);
+}
+
+.zel-trigger__icon {
+  color:var(--accent);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.zel-header__identity { display:flex;align-items:center;gap:12px; }
+.zel-header__avatar { width:36px;height:36px;border-radius:9px;background:var(--accent-dim);border:1px solid var(--border-accent);display:flex;align-items:center;justify-content:center;color:var(--accent);flex-shrink:0; }
+.zel-header__subtitle { font-family:var(--font-mono);font-size:0.6rem;color:var(--text-tertiary);letter-spacing:0.06em;text-transform:uppercase;margin-top:2px;display:flex;align-items:center;gap:5px; }
+.zel-status-dot { width:5px;height:5px;border-radius:50%;background:#4a9a6f;display:inline-block;flex-shrink:0;animation:pulse 2.4s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.45} }
+
+.zel-trigger.active { display:none; }
+
+@keyframes slideIn { from { transform:translateY(100px);opacity:0 } }
+
+.zel-window {
+  position:fixed;bottom:100px;right:24px;z-index:960;
+  width:420px;max-height:640px;
+  background:var(--bg-card);border:1px solid var(--border);border-radius:12px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.4);
+  display:flex;flex-direction:column;
+  opacity:0;pointer-events:none;
+  transform:translateY(20px) scale(0.95);
+  transition:all 0.35s cubic-bezier(0.16,1,0.3,1);
+}
+
+.zel-window.active {
+  opacity:1;pointer-events:all;
+  transform:translateY(0) scale(1);
+}
+
+.zel-header {
+  padding:20px 24px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+
+.zel-header__title {
+  font-family:var(--font-display);
+  font-size:1.2rem;font-weight:500;
+  color:var(--text-primary);
+  letter-spacing:-0.01em;
+}
+
+.zel-header__close {
+  background:none;border:none;cursor:pointer;
+  color:var(--text-tertiary);font-size:1.4rem;
+  transition:color 0.25s;padding:0;
+  width:28px;height:28px;display:flex;align-items:center;justify-content:center;
+}
+
+.zel-header__close:hover { color:var(--text-primary); }
+
+.zel-body {
+  flex:1;overflow-y:auto;padding:20px 24px;
+  display:flex;flex-direction:column;gap:14px;
+}
+
+.zel-message {
+  display:flex;gap:12px;animation:msgIn 0.3s cubic-bezier(0.16,1,0.3,1);
+}
+
+@keyframes msgIn { from { opacity:0;transform:translateY(8px) } }
+
+.zel-message.user { flex-direction:row-reverse; }
+
+.zel-message__avatar {
+  width:32px;height:32px;border-radius:8px;
+  background:var(--accent-dim);border:1px solid var(--border-accent);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-display);font-size:0.9rem;
+  color:var(--accent);flex-shrink:0;
+}
+
+.zel-message.user .zel-message__avatar {
+  background:none;border:none;font-size:1.2rem;
+}
+
+.zel-message__content {
+  max-width:280px;padding:12px 14px;border-radius:9px;
+  font-size:0.88rem;line-height:1.55;
+}
+
+.zel-message.bot .zel-message__content {
+  background:var(--bg-elevated);color:var(--text-primary);
+  border:1px solid var(--border);
+}
+
+.zel-message.user .zel-message__content {
+  background:var(--accent);color:var(--bg-primary);
+  margin-left:4px;
+}
+
+.zel-message__content strong { font-weight:500; }
+.zel-message__content em { font-style:italic;color:var(--accent); }
+
+.zel-options {
+  display:flex;flex-direction:column;gap:9px;margin-top:6px;
+}
+
+.zel-option {
+  padding:10px 12px;border:1px solid var(--border-hover);
+  border-radius:8px;background:none;cursor:pointer;
+  font-size:0.82rem;color:var(--text-secondary);font-family:var(--font-body);
+  text-align:left;transition:all 0.25s;
+}
+
+.zel-option:hover {
+  border-color:var(--accent);color:var(--accent);
+  background:rgba(195,173,138,0.05);
+}
+
+.zel-footer {
+  padding:16px 24px;border-top:1px solid var(--border);
+  display:flex;gap:9px;
+}
+
+.zel-input {
+  flex:1;background:var(--bg-elevated);border:1px solid var(--border);
+  border-radius:8px;padding:10px 12px;
+  color:var(--text-primary);font-family:var(--font-body);
+  font-size:0.82rem;outline:none;transition:border 0.25s;
+}
+
+.zel-input:focus { border-color:var(--accent); }
+.zel-input::placeholder { color:var(--text-tertiary); }
+
+.zel-send {
+  background:var(--accent);border:none;border-radius:8px;
+  color:var(--bg-primary);cursor:pointer;padding:10px 14px;
+  font-size:0.82rem;font-weight:500;transition:all 0.25s;
+  display:flex;align-items:center;justify-content:center;
+}
+
+.zel-send:hover { background:#d0bc9a;transform:translateY(-1px); }
+.zel-send:active { transform:translateY(0); }
+
+.zel-typing {
+  display:flex;gap:4px;align-items:center;height:16px;
+}
+
+.zel-typing span {
+  width:6px;height:6px;border-radius:50%;
+  background:var(--accent);opacity:0.4;
+  animation:typing 1.2s ease-in-out infinite;
+}
+
+.zel-typing span:nth-child(2) { animation-delay:0.2s; }
+.zel-typing span:nth-child(3) { animation-delay:0.4s; }
+
+@keyframes typing { 0%,60%,100%{opacity:0.3;transform:translateY(0)} 30%{opacity:1;transform:translateY(-6px)} }
+
+/* Mobile adjustments */
+@media(max-width:480px){
+  .zel-window { width:calc(100vw - 48px);bottom:90px;right:24px;left:24px;max-height:70vh; }
+  .zel-trigger { display:none; }
+  .mob-bar { padding-bottom:20px; }
+}
+
+.zel-empty { text-align:center;color:var(--text-tertiary);font-size:0.8rem;padding:20px 0; }
 </style>
 </head>
 <body>
 
 <div class="progress" id="prog"></div>
+
+<!-- ZEL Chatbot Trigger -->
+<button class="zel-trigger" id="zelTrigger" aria-label="Chat with Zel">
+  <div class="zel-trigger__icon">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="4" y="8" width="16" height="12" rx="3" stroke="currentColor" stroke-width="1.4"/>
+      <line x1="12" y1="8" x2="12" y2="5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+      <circle cx="12" cy="4.5" r="1" fill="currentColor"/>
+      <circle cx="9" cy="13.5" r="1.3" fill="currentColor"/>
+      <circle cx="15" cy="13.5" r="1.3" fill="currentColor"/>
+      <line x1="9.5" y1="16.5" x2="14.5" y2="16.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+    </svg>
+  </div>
+</button>
+
+<!-- ZEL Chat Window -->
+<div class="zel-window" id="zelWindow">
+  <div class="zel-header">
+    <div class="zel-header__identity">
+      <div class="zel-header__avatar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="4" y="8" width="16" height="12" rx="3" stroke="currentColor" stroke-width="1.4"/>
+          <line x1="12" y1="8" x2="12" y2="5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+          <circle cx="12" cy="4.5" r="1" fill="currentColor"/>
+          <circle cx="9" cy="13.5" r="1.3" fill="currentColor"/>
+          <circle cx="15" cy="13.5" r="1.3" fill="currentColor"/>
+          <line x1="9.5" y1="16.5" x2="14.5" y2="16.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div>
+        <div class="zel-header__title">Zel</div>
+        <div class="zel-header__subtitle"><span class="zel-status-dot"></span>Business Systems Advisor</div>
+      </div>
+    </div>
+    <button class="zel-header__close" id="zelClose" aria-label="Close chat">✕</button>
+  </div>
+  <div class="zel-body" id="zelBody">
+    <div class="zel-empty" id="zelEmpty">Loading...</div>
+  </div>
+  <div class="zel-footer" id="zelFooter">
+    <input type="text" class="zel-input" id="zelInput" placeholder="Type a message..." style="display:none;">
+    <button class="zel-send" id="zelSend" style="display:none;">→</button>
+  </div>
+</div>
 
 <!-- WhatsApp Float -->
 <a href="https://wa.me/919821195901?text=Hi%20Zell%C3%A9%2C%20I%27d%20like%20to%20know%20more%20about%20automation%20for%20my%20business." target="_blank" rel="noopener" class="wa-float" aria-label="Chat on WhatsApp">
@@ -285,7 +509,7 @@ section { padding:var(--section-pad) 0;position:relative; }
 
 <!-- Mobile Sticky -->
 <div class="mob-bar">
-  <a href="https://wa.me/919821195901?text=Hi%20Zell%C3%A9%2C%20I%27d%20like%20to%20know%20more%20about%20automation%20for%20my%20business." target="_blank" class="mob-bar__primary">Talk to Zellé</a>
+  <a href="javascript:void(0)" onclick="document.getElementById('zelTrigger').click()" class="mob-bar__primary">Chat with Zel</a>
   <a href="mailto:automate@zellé.com" class="mob-bar__email">Email Us</a>
 </div>
 
@@ -640,6 +864,318 @@ setTimeout(()=>rvs.forEach(el=>el.classList.add('v')),2500);
 document.querySelectorAll('a[href^="#"]').forEach(a=>{
   a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'})}});
 });
+
+// ===== ZEL CHATBOT =====
+const ZEL_BOT_ICON = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="8" width="16" height="12" rx="3" stroke="currentColor" stroke-width="1.4"/><line x1="12" y1="8" x2="12" y2="5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="12" cy="4.5" r="1" fill="currentColor"/><circle cx="9" cy="13.5" r="1.3" fill="currentColor"/><circle cx="15" cy="13.5" r="1.3" fill="currentColor"/><line x1="9.5" y1="16.5" x2="14.5" y2="16.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`;
+
+class ZelChatbot {
+  constructor() {
+    this.trigger = document.getElementById('zelTrigger');
+    this.window = document.getElementById('zelWindow');
+    this.body = document.getElementById('zelBody');
+    this.input = document.getElementById('zelInput');
+    this.send = document.getElementById('zelSend');
+    this.close = document.getElementById('zelClose');
+    this.footer = document.getElementById('zelFooter');
+    
+    this.state = {
+      stage: 'welcome',
+      businessType: null,
+      painPoints: [],
+      conversation: []
+    };
+    
+    this.setup();
+  }
+  
+  setup() {
+    this.trigger.addEventListener('click', () => this.open());
+    this.close.addEventListener('click', () => this.close_window());
+    this.send.addEventListener('click', () => this.sendMessage());
+    this.input.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') this.sendMessage();
+    });
+  }
+  
+  open() {
+    this.trigger.classList.add('active');
+    this.window.classList.add('active');
+    if (this.state.stage === 'welcome') {
+      this.showWelcome();
+    }
+  }
+  
+  close_window() {
+    this.trigger.classList.remove('active');
+    this.window.classList.remove('active');
+  }
+  
+  addMessage(text, isUser = false) {
+    const msg = document.createElement('div');
+    msg.className = `zel-message ${isUser ? 'user' : 'bot'}`;
+    
+    if (isUser) {
+      msg.innerHTML = `
+        <div class="zel-message__avatar" style="background:none;border:none;font-size:0.75rem;font-weight:500;color:var(--text-tertiary)">You</div>
+        <div class="zel-message__content">${this.escapeHtml(text)}</div>
+      `;
+    } else {
+      msg.innerHTML = `
+        <div class="zel-message__avatar">${ZEL_BOT_ICON}</div>
+        <div class="zel-message__content">${text}</div>
+      `;
+    }
+    
+    this.body.appendChild(msg);
+    this.body.scrollTop = this.body.scrollHeight;
+  }
+  
+  showTyping() {
+    const typing = document.createElement('div');
+    typing.className = 'zel-message bot';
+    typing.id = 'typing-indicator';
+    typing.innerHTML = `
+      <div class="zel-message__avatar">${ZEL_BOT_ICON}</div>
+      <div class="zel-message__content" style="padding:8px 12px">
+        <div class="zel-typing">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    `;
+    this.body.appendChild(typing);
+    this.body.scrollTop = this.body.scrollHeight;
+  }
+  
+  removeTyping() {
+    const typing = document.getElementById('typing-indicator');
+    if (typing) typing.remove();
+  }
+  
+  showWelcome() {
+    this.body.innerHTML = '';
+    this.addMessage('Hi — I\'m <strong>Zel</strong>.<br><br>I help businesses understand how smarter systems can improve lead response, follow-ups, and operations.');
+    
+    setTimeout(() => {
+      this.addMessage('To start, <strong>what kind of business are you running?</strong>');
+      this.showOptions([
+        { text: 'Clinic / Healthcare', value: 'clinic' },
+        { text: 'Gym / Fitness', value: 'gym' },
+        { text: 'Real Estate', value: 'realestate' },
+        { text: 'Service Business', value: 'service' },
+        { text: 'Something Else', value: 'other' }
+      ]);
+    }, 800);
+    
+    this.state.stage = 'business-type';
+  }
+  
+  showOptions(options) {
+    const container = document.createElement('div');
+    container.className = 'zel-options';
+    
+    options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'zel-option';
+      btn.textContent = opt.text;
+      btn.onclick = () => this.handleOption(opt.value, opt.text);
+      container.appendChild(btn);
+    });
+    
+    this.body.appendChild(container);
+    this.input.style.display = 'none';
+    this.send.style.display = 'none';
+  }
+  
+  handleOption(value, text) {
+    this.addMessage(text, true);
+    const options = document.querySelectorAll('.zel-options');
+    options.forEach(o => o.remove());
+    
+    if (this.state.stage === 'business-type') {
+      this.state.businessType = value;
+      this.state.stage = 'pain-points';
+      setTimeout(() => this.askPainPoints(), 600);
+    } else if (this.state.stage === 'pain-points') {
+      this.state.painPoints.push(value);
+      setTimeout(() => this.askMorePainPoints(), 600);
+    } else if (this.state.stage === 'followup') {
+      if (value === 'yes') {
+        setTimeout(() => this.showRecommendations(), 600);
+      } else {
+        setTimeout(() => this.closeChat(), 600);
+      }
+    } else if (this.state.stage === 'whatsapp') {
+      this.goToWhatsApp();
+    }
+  }
+  
+  askPainPoints() {
+    this.addMessage('Great. Now, let\'s understand your current situation.<br><br><strong>What\'s your biggest operational challenge right now?</strong>');
+    
+    const options = this.getPainPointsForBusiness(this.state.businessType);
+    setTimeout(() => this.showOptions(options), 800);
+  }
+  
+  getPainPointsForBusiness(type) {
+    const map = {
+      clinic: [
+        { text: 'Managing patient inquiries efficiently', value: 'patient-inquiries' },
+        { text: 'Following up with no-shows', value: 'no-shows' },
+        { text: 'Appointment scheduling bottlenecks', value: 'scheduling' },
+        { text: 'Patient communication gaps', value: 'communication' }
+      ],
+      gym: [
+        { text: 'Converting membership inquiries', value: 'conversion' },
+        { text: 'Member retention & engagement', value: 'retention' },
+        { text: 'Class scheduling & notifications', value: 'scheduling' },
+        { text: 'Trial member follow-ups', value: 'followup' }
+      ],
+      realestate: [
+        { text: 'Lead response time delays', value: 'response-time' },
+        { text: 'Qualifying buyers & sellers', value: 'qualification' },
+        { text: 'Property inquiry management', value: 'inquiry' },
+        { text: 'Follow-up consistency', value: 'followup' }
+      ],
+      service: [
+        { text: 'Too many manual follow-ups', value: 'manual' },
+        { text: 'Losing leads to competitors', value: 'losing-leads' },
+        { text: 'Inconsistent response times', value: 'response' },
+        { text: 'Booking & scheduling chaos', value: 'booking' }
+      ],
+      other: [
+        { text: 'Lead response & follow-up', value: 'followup' },
+        { text: 'Customer communication', value: 'communication' },
+        { text: 'Scheduling & availability', value: 'scheduling' },
+        { text: 'Manual administrative work', value: 'admin' }
+      ]
+    };
+    
+    return map[type] || map.other;
+  }
+  
+  askMorePainPoints() {
+    this.addMessage('Got it. <strong>Any other pain points?</strong> (Select one or continue)');
+    
+    const remainingOptions = this.getPainPointsForBusiness(this.state.businessType)
+      .filter(p => !this.state.painPoints.includes(p.value));
+    
+    const options = [
+      ...remainingOptions,
+      { text: 'That\'s the main one', value: 'done' }
+    ];
+    
+    setTimeout(() => this.showOptions(options), 800);
+  }
+  
+  showRecommendations() {
+    this.body.innerHTML = '';
+    this.addMessage("Based on what you shared, here's what I think would help:");
+    
+    const recs = this.getRecommendations(this.state.businessType, this.state.painPoints);
+    
+    setTimeout(() => {
+      let msg = '<strong style="color:var(--accent)">Recommended Systems:</strong><br><br>';
+      recs.forEach((r, i) => {
+        msg += `<strong>${i + 1}. ${r.name}</strong><br>${r.desc}<br><br>`;
+      });
+      this.addMessage(msg);
+    }, 600);
+    
+    setTimeout(() => {
+      this.addMessage('Would you like to discuss how this could work for your business?');
+      this.showOptions([
+        { text: 'Yes, tell me more', value: 'yes' },
+        { text: 'Not interested', value: 'no' }
+      ]);
+      this.state.stage = 'whatsapp';
+    }, 1400);
+  }
+  
+  getRecommendations(type, painPoints) {
+    const baseRecs = {
+      clinic: [
+        { name: 'Patient Communication Hub', desc: 'Auto-respond to inquiries, send appointment reminders, manage cancellations.' },
+        { name: 'Inquiry-to-Booking Flow', desc: 'Convert prospects instantly with automated follow-up sequences.' }
+      ],
+      gym: [
+        { name: 'Trial Member Follow-up', desc: 'Auto-engage new members with personalized onboarding & class invites.' },
+        { name: 'Membership Inquiry System', desc: 'Instant responses, qualification, and automatic follow-up sequences.' }
+      ],
+      realestate: [
+        { name: 'Lead Response System', desc: 'Respond to property inquiries within seconds, qualify buyers automatically.' },
+        { name: 'Nurture Sequences', desc: 'Keep prospects engaged with smart, contextual follow-ups.' }
+      ],
+      service: [
+        { name: 'Smart Lead Follow-up', desc: 'Auto-engage leads, qualify them, and hand off to your team at the right moment.' },
+        { name: 'Booking & Scheduling', desc: 'Let customers book directly, send reminders, handle cancellations.' }
+      ],
+      other: [
+        { name: 'Lead Qualification Engine', desc: 'Automatically qualify inbound inquiries before they reach your team.' },
+        { name: 'Smart Follow-up Sequences', desc: 'Personalized, timely follow-ups that convert.' }
+      ]
+    };
+    
+    return baseRecs[type] || baseRecs.other;
+  }
+  
+  goToWhatsApp() {
+    const businessType = this.state.businessType || 'general';
+    const painPoints = this.state.painPoints.length > 0 ? this.state.painPoints.join(', ') : 'general inquiry';
+    const msg = encodeURIComponent(`Hi Zellé, I'm interested in learning more about automation for my ${businessType} business. My main challenges are: ${painPoints}`);
+    window.open(`https://wa.me/919821195901?text=${msg}`, '_blank');
+    
+    this.body.innerHTML = '';
+    this.addMessage('Perfect! I\'ve opened WhatsApp for you. Our team will be ready to discuss your specific needs.');
+    this.addMessage('While you\'re connecting, remember: <em>systems that respond instantly and follow up automatically convert 3-5x more leads.</em>');
+    
+    this.input.style.display = 'none';
+    this.send.style.display = 'none';
+  }
+  
+  closeChat() {
+    this.body.innerHTML = '';
+    this.addMessage('No problem! If you change your mind, I\'m here anytime. Feel free to reach out again.');
+    this.input.style.display = 'none';
+    this.send.style.display = 'none';
+    
+    setTimeout(() => this.close_window(), 2000);
+  }
+  
+  sendMessage() {
+    const text = this.input.value.trim();
+    if (!text) return;
+    
+    this.addMessage(text, true);
+    this.input.value = '';
+    
+    this.showTyping();
+    setTimeout(() => {
+      this.removeTyping();
+      this.addMessage('I appreciate the context. For now, let me guide you through a quick assessment so I can make the best recommendation.');
+      this.state.stage = 'assessment';
+    }, 1200);
+  }
+  
+  escapeHtml(text) {
+    const map = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#039;'
+    };
+    return text.replace(/[&<>"']/g, m => map[m]);
+  }
+}
+
+// Initialize chatbot when page loads
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    new ZelChatbot();
+  });
+} else {
+  new ZelChatbot();
+}
 </script>
 </body>
 </html>
